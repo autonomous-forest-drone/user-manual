@@ -1,22 +1,17 @@
 \documentclass{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
 \usepackage[english]{babel}
 \usepackage{enumerate}
-
-% Set page size and margins
-% Replace `letterpaper' with `a4paper' for UK/EU standard size
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-
-% Useful packages
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{titling}
-
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -24,21 +19,21 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
+    backgroundcolor=\color{backcolour},
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
     basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
+    showtabs=false,
     tabsize=2
 }
 
@@ -47,77 +42,1050 @@
 \setlength{\parskip}{\baselineskip}%
 \setlength{\parindent}{0pt}%
 
-
 \begin{document}
 
-\title{Embedded System User Manual}
-\date{} 
-\author{Elina Rosato \and Danielis Maizelis}
+\title{Autonomous Forest Drone\\[0.4em]\large User Manual}
+\date{April 2026}
+\author{Elina Rosato, Danielis Maizelis\\[0.3em]
+\small Kristianstad University, Sweden}
 
-% title page
 \maketitle
+\newpage
 
-%\begin{abstract}
-%Your abstract.
-%\end{abstract}
-
-% table of contents
 \tableofcontents
 \newpage
 
-% section 1: introduction
+% =============================================================
 \section{Introduction}
+% =============================================================
 
-This section should provide an overview of the purpose of the manual and the embedded system it covers.
+This manual covers the setup, operation, and maintenance of the Autonomous Forest Drone system developed as a bachelor's thesis in Computer Science and Engineering with a specialisation in IoT at Kristianstad University, Sweden.
 
-% section 2: system overview
+The drone is designed for autonomous navigation in forest environments. \textbf{This document assumes the drone is already assembled.} It focuses on software configuration, pre-flight preparation, operation, and troubleshooting.
+
+\textbf{Intended users:}
+\begin{itemize}
+    \item Research operators and field technicians (primary)
+    \item Academic supervisors and industry partners (secondary)
+    \item Future developers extending the system (tertiary)
+\end{itemize}
+
+Users are expected to have a basic understanding of drone operation and familiarity with command-line interfaces. Some knowledge of ROS and Python is helpful but not required.
+
+% =============================================================
 \section{System Overview}
+% =============================================================
 
-This section should provide an overview of the embedded system, including its architecture, components, and interfaces.
+\subsection{Purpose}
 
-% section 3: hardware requirements
-\section{Hardware Requirements}
+The system performs autonomous waypoint-based navigation in forest environments. Missions are scripted and executed by a Jetson Orin Nano companion computer, which communicates with the Pixhawk flight controller via MAVLink. During flight, the drone captures photos and sensor data for post-mission analysis in support of forest monitoring research.
 
-This section should list the hardware requirements for the embedded system, including any specific components that are necessary for proper operation.
+\subsection{Main Capabilities}
 
-% section 4: software requirements
-\section{Software Requirements}
+\begin{itemize}
+    \item Autonomous waypoint navigation in forested terrain
+    \item Photo and sensor data capture during flight
+    \item Forest monitoring missions up to 15 minutes
+    \item Real-time monitoring in QGroundControl
+    \item Telemetry streaming to ground control station (CLI custom implementation)
+    \item GPS-based positioning with barometric altitude hold
+    \item Manual RC override available at any time
+    \item Geofencing and automatic safety features (Return to Launch, low-battery auto-land)
+    \item Data logging for post-flight analysis
+\end{itemize}
 
-This section should list the software requirements for the embedded system, including any specific operating systems, drivers, or applications that are necessary for proper operation.
+\subsection{Known Limitations}
 
-% section 5: installation
-\section{Installation}
+\begin{itemize}
+    \item \textbf{Flight time:} approximately 12--15 minutes (4S 5000\,mAh LiPo)
+    \item \textbf{Maximum speed:} 3\,m/s (safety limit in forest environments)
+    \item \textbf{GPS required:} does not operate indoors or under dense canopy
+    \item \textbf{Weather:} no rain; wind must be below 3\,m/s; temperature 0--35$^\circ$C
+    \item \textbf{Minimum GPS satellites:} 12 or more required before flight
+\end{itemize}
 
-This section should provide step-by-step instructions for installing the embedded system, including any necessary software and hardware.
+\subsection{Physical Specifications}
 
-% section 6: usage
-\section{Usage}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Frame & Holybro S500 V2 (500\,mm diagonal wheelbase) \\
+Dimensions & 550\,mm $\times$ 550\,mm $\times$ 200\,mm (with propellers) \\
+Total weight & approximately 2.3\,kg (including battery) \\
+Battery & 4S LiPo 14.8\,V 5000\,mAh (XT60 connector) \\
+Flight time & 12--15 minutes \\
+Additional payload capacity & approximately 500\,g \\
+Operating temperature & 0--35$^\circ$C \\
+Maximum humidity & below 80\% (no rain) \\
+Maximum wind & 3\,m/s sustained \\
+Maximum altitude & 50\,m AGL \\
+\bottomrule
+\end{tabular}
 
-This section should provide instructions for using the embedded system, including how to interact with the system and any specific features or capabilities.
+% =============================================================
+\section{Components Reference}
+% =============================================================
 
-% section 7: troubleshooting
+This section lists all hardware components with their exact names and models. The reference numbers in the tables correspond to the labels in Figure~\ref{fig:drone-diagram}. Use this section as a reference when identifying or ordering replacement parts.
+
+\begin{figure}[h]
+    \centering
+    % Replace the placeholder below with your annotated drone image:
+    % \includegraphics[width=0.8\textwidth]{drone-diagram.png}
+    \framebox[0.8\textwidth]{\rule{0pt}{6cm}\hfill\textit{[Insert annotated drone diagram here]}\hfill}
+    \caption{Drone component reference diagram}
+    \label{fig:drone-diagram}
+\end{figure}
+
+\subsection{Flight Platform}
+
+\begin{tabular}{clll}
+\toprule
+\textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
+\midrule
+1 & Frame & Holybro S500 V2 Quadcopter Kit & 500\,mm diagonal \\
+2 & Motors ($\times$4) & Holybro 2216 880KV Brushless Motor & 4 required \\
+3 & ESCs ($\times$4) & 40\,A Electronic Speed Controller & Included in S500 V2 kit \\
+4 & Propellers CW ($\times$2) & 1045 Propeller (10-inch, 4.5-pitch, CW) & Unmarked or marked ``R'' \\
+5 & Propellers CCW ($\times$2) & 1045 Propeller (10-inch, 4.5-pitch, CCW) & Marked with ``L'' \\
+6 & Power distribution & Holybro PDB (Power Distribution Board) & Included in kit \\
+\bottomrule
+\end{tabular}
+
+\subsection{Flight Controller System}
+
+\begin{tabular}{clll}
+\toprule
+\textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
+\midrule
+7  & Flight controller & Holybro Pixhawk 6C & Main autopilot \\
+8  & GPS module & Holybro M9N GPS with compass & Dual GNSS (GPS + GLONASS) \\
+9  & Telemetry radio & RFD900x or SiK Radio & 915\,MHz or 433\,MHz \\
+10 & Power module & Holybro PM02 & Voltage and current sensing \\
+11 & RC receiver & FlySky FS-iA6B & PPM mode, 6 channels \\
+12 & RC transmitter & FlySky FS-i6 & 6-channel, 2.4\,GHz AFHDS \\
+\bottomrule
+\end{tabular}
+
+\subsection{Companion Computer}
+
+\begin{tabular}{clll}
+\toprule
+\textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
+\midrule
+13 & Companion computer & NVIDIA Jetson Orin Nano 8GB & Main onboard computer \\
+14 & Camera & Arducam IMX477 & 12\,MP, 100$^\circ$ FOV, CSI interface \\
+\bottomrule
+\end{tabular}
+
+\subsection{Power System}
+
+\begin{tabular}{clll}
+\toprule
+\textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
+\midrule
+15 & Main battery & 4S LiPo 14.8\,V 5000\,mAh & XT60 connector \\
+16 & Y-splitter & XT60 Y-Splitter Cable & Battery $\rightarrow$ PDB + Jetson power \\
+17 & Battery charger & 4S LiPo Balance Charger & Balance charging required \\
+\bottomrule
+\end{tabular}
+
+% =============================================================
+\section{Software Overview}
+% =============================================================
+
+\subsection{Onboard Software}
+
+\textbf{Pixhawk}\\
+\texttt{PX4 Autopilot v1.14+}: Open-source flight stack managing low-level flight control, sensor fusion, geofencing, and safety features. The Pixhawk comes pre-flashed and ready to use. To update the firmware to a newer version, see Section~\ref{sec:firmware}.
+
+\textbf{NVIDIA Jetson Orin Nano}\\
+\texttt{ROS 2 with MAVROS}: communicates with the Pixhawk via \texttt{/dev/ttyACM0}\\
+\texttt{Drone Brain}: Repository with autonomous missions, tests and helper scripts. This repository is actively developed. For the current list of available missions, tests, and helpers, refer to the repository README and the \texttt{docs/} folder. See Section~\ref{sec:repos} for setup instructions.
+
+Download: \url{https://github.com/autonomous-forest-drone/drone-brain}
+
+
+\subsection{Ground Control Software}
+
+\textbf{QGroundControl (QGC)}\\
+\texttt{QGC} is the primary ground control station application. It is used for:
+\begin{itemize}
+    \item Flashing and configuring Pixhawk firmware
+    \item Sensor calibration and parameter management
+    \item Mission planning and waypoint upload
+    \item Real-time telemetry monitoring during flight
+    \item Flight log download and analysis
+\end{itemize}
+
+Download: \url{https://qgroundcontrol.com}
+
+\textbf{Ground Control Station scripts}
+
+The \texttt{ground-control-station} repository runs on the monitoring computer. It is currently under active development. It includes an image receiver to display photos transmitted by the drone's \texttt{image-sender} helper. See Section~\ref{sec:repos} for setup instructions, and refer to the repository README for the current state of available scripts.
+
+Download: \url{https://github.com/autonomous-forest-drone/ground-control-station}
+
+\subsection{Communication Architecture}
+
+\begin{itemize}
+    \item \textbf{Pixhawk $\leftrightarrow$ QGC:} Via telemetry radio (433\,MHz), up to 1\,km range
+    \item \textbf{Pixhawk $\leftrightarrow$ Jetson:} USB serial on \texttt{/dev/ttyACM0}, MAVLink 2.0
+    \item \textbf{Jetson $\leftrightarrow$ Operator:} WiFi SSH (ground use only -- not active during flight)
+\end{itemize}
+
+% =============================================================
+\section{Setup and Configuration}
+% =============================================================
+
+\subsection{Installing QGroundControl}
+
+Download the installer for your platform from \url{https://qgroundcontrol.com} and follow the on-screen instructions. QGC is available for Windows, macOS, and Linux.
+
+\subsection{Flashing or Reflashing the Pixhawk Firmware}
+\label{sec:firmware}
+
+Reflashing is required when:
+\begin{itemize}
+    \item Setting up a new or replacement Pixhawk 6C
+    \item Upgrading to a newer PX4 stable release
+    \item Recovering from corrupted firmware
+\end{itemize}
+
+\textbf{Steps:}
+\begin{enumerate}
+    \item Disconnect the main battery
+    \item Connect the Pixhawk to your computer using a Micro-USB cable
+    \item Open QGroundControl -- it detects the Pixhawk automatically
+    \item Go to \textbf{Vehicle Setup $\rightarrow$ Firmware}
+    \item Select \textbf{PX4 Flight Stack -- Stable Release}
+    \item Click \textbf{OK} and wait for the flash to complete (the Pixhawk will reboot)
+    \item When prompted, select airframe: \textbf{Holybro S500} or \textbf{Generic Quadrotor X}
+\end{enumerate}
+
+\textbf{Important:} Reflashing resets all parameters to factory defaults. You must recalibrate sensors and re-apply all parameters afterward. See Section~\ref{sec:calibration} for calibration steps and Appendix~\ref{app:params} for the required parameter values.
+
+\subsection{Sensor Calibration in QGroundControl}
+\label{sec:calibration}
+
+After a firmware flash, or if QGC displays calibration warnings, complete these in order:
+
+\begin{enumerate}
+    \item \textbf{Accelerometer} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Accelerometer. Follow the 6-position procedure on a level surface.
+    \item \textbf{Compass} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Compass. Perform outdoors, away from metal and electronics. Rotate the drone through all axes as shown in QGC.
+    \item \textbf{Radio (RC)} -- Vehicle Setup $\rightarrow$ Radio. Move all sticks and switches to their full extents to set channel ranges.
+    \item \textbf{Flight Modes} -- Vehicle Setup $\rightarrow$ Flight Modes. Assign modes to the Channel 5 switch.
+    \item \textbf{ESC Calibration} -- Vehicle Setup $\rightarrow$ Power $\rightarrow$ ESC Calibration. Remove propellers first.
+\end{enumerate}
+
+Detailed step-by-step instructions for each calibration are in Appendix~\ref{app:calibration}.
+
+\subsection{Connecting to the Jetson via WiFi and SSH}
+\label{sec:ssh}
+
+SSH is used during ground operations to manage scripts, launch ROS nodes, and view logs. The Jetson must be connected to the same WiFi network as your computer.
+
+\textbf{Find the Jetson's IP address} (if unknown):
+
+If a monitor is available, connect it to the Jetson and run:
+\begin{lstlisting}[language=bash]
+ip addr show
+\end{lstlisting}
+
+To scan the local network from another machine:
+\begin{lstlisting}[language=bash]
+nmap -sn 192.168.1.0/24    # adjust subnet as needed
+\end{lstlisting}
+
+\textbf{Connect via SSH:}
+\begin{lstlisting}[language=bash]
+ssh beetlesniffer@<jetson-ip-address>
+\end{lstlisting}
+
+\textbf{Configure WiFi on the Jetson (if needed):}
+\begin{lstlisting}[language=bash]
+# List available networks
+nmcli device wifi list
+
+# Connect to a network
+nmcli device wifi connect "NetworkName" password "yourpassword"
+
+# Verify connection
+nmcli connection show
+\end{lstlisting}
+
+\textbf{Set a static IP (recommended for consistent SSH access):}
+\begin{lstlisting}[language=bash]
+nmcli connection modify "NetworkName" ipv4.addresses 192.168.1.100/24
+nmcli connection modify "NetworkName" ipv4.method manual
+nmcli connection up "NetworkName"
+\end{lstlisting}
+
+\subsection{Setting Up the Repositories}
+\label{sec:repos}
+
+There are two repositories. Each must be cloned on the correct machine. Because both are actively developed, always read the README inside each repository for the most up-to-date setup instructions and the current list of available scripts.
+
+\subsubsection{drone-brain (clone on the Jetson)}
+
+SSH into the Jetson (see Section~\ref{sec:ssh}), then:
+
+\begin{lstlisting}[language=bash]
+# Clone the repository (first time only)
+git clone https://github.com/autonomous-forest-drone/drone-brain.git ~/drone-brain
+
+# Install Python dependencies
+cd ~/drone-brain
+pip3 install -r requirements.txt
+\end{lstlisting}
+
+Repository: \url{https://github.com/autonomous-forest-drone/drone-brain}
+
+\subsubsection{ground-control-station (clone on the monitoring computer)}
+
+Run the following on the ground monitoring computer:
+
+\begin{lstlisting}[language=bash]
+# Clone the repository (first time only)
+git clone https://github.com/autonomous-forest-drone/ground-control-station.git ~/ground-control-station
+
+# Install Python dependencies (once a requirements.txt is available)
+cd ~/ground-control-station
+pip3 install -r requirements.txt
+\end{lstlisting}
+
+Repository: \url{https://github.com/autonomous-forest-drone/ground-control-station}
+
+\subsubsection{Updating Either Repository}
+
+To pull the latest scripts on either machine:
+\begin{lstlisting}[language=bash]
+cd ~/drone-brain          # or ~/ground-control-station
+git pull origin main
+\end{lstlisting}
+
+If you have local changes to discard before pulling:
+\begin{lstlisting}[language=bash]
+git stash
+git pull origin main
+\end{lstlisting}
+
+% =============================================================
+\section{Pre-Flight Checklist}
+% =============================================================
+
+Complete every item before every flight -- no exceptions.
+
+\subsection*{Physical Inspection}
+\begin{itemize}
+    \item[$\square$] All propellers installed correctly (CW/CCW per motor diagram, Appendix~\ref{app:wiring})
+    \item[$\square$] No cracks or damage to frame, arms, or propellers
+    \item[$\square$] All motor mount screws tight
+    \item[$\square$] Battery secured with velcro straps, centred on frame
+    \item[$\square$] Camera lens clean and facing forward
+    \item[$\square$] GPS module upright and unobstructed
+    \item[$\square$] No loose wires or connectors
+\end{itemize}
+
+\subsection*{Battery}
+\begin{itemize}
+    \item[$\square$] Fully charged: 16.4--16.8\,V (4.1--4.2\,V per cell)
+    \item[$\square$] No swelling or physical damage
+    \item[$\square$] XT60 connectors clean and undamaged
+\end{itemize}
+
+\subsection*{Environment}
+\begin{itemize}
+    \item[$\square$] Clear sky view (no dense overhead canopy blocking GPS)
+    \item[$\square$] Wind below 3\,m/s
+    \item[$\square$] No rain or fog
+    \item[$\square$] Temperature between 0--35$^\circ$C
+    \item[$\square$] 50\,m safety perimeter clear of people and animals
+\end{itemize}
+
+\subsection*{Software and Telemetry (check in QGC)}
+\begin{itemize}
+    \item[$\square$] QGC connected and showing live telemetry
+    \item[$\square$] GPS: 12+ satellites, 3D fix, HDOP below 1.5
+    \item[$\square$] Battery voltage 15.5\,V or above
+    \item[$\square$] All sensors showing green (no red indicators)
+    \item[$\square$] RC transmitter on and all channels responding in QGC
+    \item[$\square$] Geofence configured (100\,m horizontal, 50\,m vertical)
+    \item[$\square$] Flight mode set correctly for the planned mission
+\end{itemize}
+
+% =============================================================
+\section{Operation}
+% =============================================================
+
+\subsection{Startup Procedure}
+
+\begin{enumerate}
+    \item Place the drone in an open outdoor area
+    \item Power on the RC transmitter
+    \item Connect the main battery to the XT60 Y-splitter
+    \item Wait for the Pixhawk to boot (LED flashes during boot, solid when ready)
+    \item Wait approximately 60 seconds for the Jetson to boot
+    \item Connect QGC via the telemetry radio link
+    \item \textbf{Wait at least 5 minutes} before arming -- the barometer and GPS need time to stabilise
+\end{enumerate}
+
+\subsection{RC Transmitter Guide}
+
+The FlySky FS-i6 transmitter provides manual control and safety override. It always takes priority over autonomous commands.
+
+\textbf{Stick layout (Mode 2 -- default):}
+\begin{itemize}
+    \item \textbf{Left stick vertical:} Throttle (up = climb)
+    \item \textbf{Left stick horizontal:} Yaw (rotate left/right)
+    \item \textbf{Right stick vertical:} Pitch (forward/backward)
+    \item \textbf{Right stick horizontal:} Roll (tilt left/right)
+\end{itemize}
+
+\textbf{Switches:}
+\begin{itemize}
+    \item \textbf{Channel 5:} Flight mode selector (3-position switch)
+    \item \textbf{Channel 6:} Arming switch
+\end{itemize}
+
+\subsection{Arming and Disarming}
+
+\textbf{Arming:}
+\begin{enumerate}
+    \item Set throttle stick to full down
+    \item Move rudder stick to full right
+    \item Hold for 2 seconds
+    \item Motors begin spinning at idle -- QGC shows \textbf{ARMED}
+\end{enumerate}
+
+\textbf{Disarming:}
+\begin{enumerate}
+    \item Set throttle stick to full down
+    \item Move rudder stick to full left
+    \item Hold for 2 seconds
+    \item Motors stop -- QGC shows \textbf{DISARMED}
+\end{enumerate}
+
+\subsection{Flight Modes}
+
+\begin{tabular}{lll}
+\toprule
+\textbf{Mode} & \textbf{Description} & \textbf{Typical Use} \\
+\midrule
+Manual & No stabilisation & Not recommended \\
+Stabilise & Auto-levels when sticks are centred & Manual flight practice \\
+Altitude Hold & Holds altitude automatically & Basic altitude testing \\
+Position & GPS position hold + altitude hold & GPS testing, stationary hover \\
+Offboard & Jetson controls via MAVROS & Autonomous scripted mission \\
+RTL & Returns to launch automatically & Emergency or end of mission \\
+\bottomrule
+\end{tabular}
+
+Modes are selected via the Channel 5 switch. Configure the switch positions in \textbf{QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Flight Modes}.
+
+\textbf{Note:} Switching to Stabilise or Altitude Hold at any time immediately cancels Offboard mode and returns control to the RC transmitter.
+
+\subsection{Using QGroundControl}
+\label{sec:qgc}
+
+\subsubsection{Connecting to the Drone}
+\begin{itemize}
+    \item \textbf{Via telemetry radio:} QGC connects automatically when the ground radio is plugged in and the drone is powered
+    \item \textbf{Via USB:} Connect the Pixhawk with a Micro-USB cable; QGC detects it automatically
+\end{itemize}
+
+\subsubsection{Main Flight Screen}
+\begin{itemize}
+    \item \textbf{Top bar:} GPS count, battery voltage, flight mode, armed status, telemetry signal strength
+    \item \textbf{Map view:} Drone position, home point, geofence, mission waypoints
+    \item \textbf{Attitude indicator:} Live pitch and roll
+    \item \textbf{Altitude and speed:} Current values in real time
+\end{itemize}
+
+\subsubsection{Planning a Mission (Waypoints)}
+\begin{enumerate}
+    \item Click \textbf{Plan} (map icon) in the left toolbar
+    \item Click on the map to place waypoints
+    \item Set altitude for each waypoint (5--10\,m AGL recommended)
+    \item Click \textbf{Upload} to send the mission to the Pixhawk
+    \item Return to the \textbf{Fly} view to monitor execution
+\end{enumerate}
+
+\subsubsection{Viewing and Changing Parameters}
+\begin{enumerate}
+    \item Vehicle Setup $\rightarrow$ Parameters
+    \item Use the search bar to find a parameter by name
+    \item Click the parameter, enter the new value, click \textbf{Save}
+    \item Reboot the Pixhawk if QGC prompts for a reboot
+\end{enumerate}
+
+All critical parameters are listed in Appendix~\ref{app:params}.
+
+\subsubsection{Configuring the Geofence}
+\begin{enumerate}
+    \item Plan view $\rightarrow$ Fence (fence icon in toolbar)
+    \item Draw an inclusion zone around the flight area
+    \item Set maximum altitude (50\,m recommended)
+    \item Click \textbf{Upload}
+\end{enumerate}
+
+\subsubsection{Downloading Flight Logs}
+\begin{enumerate}
+    \item Vehicle Setup $\rightarrow$ Analyse Tools $\rightarrow$ Log Download
+    \item Select the log file by date and time
+    \item Click \textbf{Download}
+    \item Upload the \texttt{.ulg} file to \url{https://logs.px4.io} for online analysis
+\end{enumerate}
+
+\subsection{Running a Mission or Test}
+
+All scripts in \texttt{drone-brain} follow the same two-terminal pattern. All terminals must be SSH sessions on the Jetson.
+
+\textbf{Terminal 1 -- start MAVROS (required for every mission or test):}
+\begin{lstlisting}[language=bash]
+ros2 launch mavros px4.launch fcu_url:=/dev/ttyACM0
+\end{lstlisting}
+
+\textbf{Terminal 2 -- run a mission, test, or helper:}
+\begin{lstlisting}[language=bash]
+# Run a mission
+python3 ~/drone-brain/missions/<mission>.py
+
+# Run a pre-flight test
+python3 ~/drone-brain/test/<test>.py
+
+# Run a helper (alongside a mission, in a separate terminal)
+python3 ~/drone-brain/helpers/<helper>.py
+\end{lstlisting}
+
+\textbf{Currently available scripts} (check the repository for additions):
+
+\begin{tabular}{llp{10cm}}
+\toprule
+\textbf{Type} & \textbf{Name} & \textbf{Description} \\
+\midrule
+Test & \texttt{hover-test} & Basic hover to verify arming and altitude hold \\
+Helper & \texttt{telemetry-monitoring} & Prints live telemetry to the terminal \\
+Helper & \texttt{image-sender} & Captures a frame from the Arducam IMX477 via GStreamer, resizes to 128$\times$128, and transmits it to the ground station in 128-byte chunks over MAVROS Tunnel messages every 20 seconds \\
+\bottomrule
+\end{tabular}
+
+For the full and up-to-date list of available missions, tests, and helpers, read the repository README and the \texttt{docs/} folder: \url{https://github.com/autonomous-forest-drone/drone-brain}
+
+\textbf{Emergency override:} Switch to Stabilise or Altitude Hold on the RC transmitter at any time to cancel Offboard mode and take manual control.
+
+\textbf{Recommended: use \texttt{tmux} to keep sessions alive if SSH disconnects:}
+\begin{lstlisting}[language=bash]
+# Start a named session
+tmux new -s drone
+
+# Split into two panes: Ctrl+B then %  (or ")
+# Detach (session keeps running): Ctrl+B then D
+# Reconnect later:
+tmux attach -t drone
+\end{lstlisting}
+
+\subsection{Running Ground Control Station Scripts}
+
+On the monitoring computer, start the relevant script from the \texttt{ground-control-station} repository before or during a mission.
+
+The repository is under active development. Refer to its README for the current list of scripts and usage instructions: \url{https://github.com/autonomous-forest-drone/ground-control-station}
+
+The \texttt{image-receiver} script will receive and display the images transmitted by the drone's \texttt{image-sender} helper.
+
+\subsection{In-Flight Monitoring}
+
+Keep QGC open and watch these values throughout every flight:
+
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Normal Range} & \textbf{Action if Out of Range} \\
+\midrule
+Battery voltage & 14.4--16.8\,V & Land immediately below 14.0\,V \\
+Battery remaining & 30--100\% & RTL auto-triggers at 20\% \\
+GPS satellites & 12 or more & Land if count drops below 8 \\
+HDOP & below 1.5 & Land if above 2.5 \\
+Speed (autonomous) & below 3\,m/s & Check Offboard mode parameters \\
+Altitude deviation & within $\pm$2\,m of plan & Investigate if larger \\
+\bottomrule
+\end{tabular}
+
+\textbf{Land immediately if any of the following occur:}
+\begin{itemize}
+    \item Battery below 20\%
+    \item ``GPS lost'' warning in QGC
+    \item Unusual vibration, noise, or erratic movement
+    \item Telemetry lost for more than 10 seconds
+\end{itemize}
+
+\subsection{Landing Procedures}
+
+\textbf{Manual landing:}
+\begin{enumerate}
+    \item Switch RC to Stabilise or Altitude Hold mode
+    \item Position drone over the landing zone
+    \item Reduce throttle gradually -- target descent rate 0.3--0.5\,m/s
+    \item Once on the ground, lower throttle to minimum
+    \item Disarm (throttle down + rudder left, hold 2 seconds)
+\end{enumerate}
+
+\textbf{Autonomous landing:}
+The mission script lands automatically at the end of the waypoint sequence. To trigger an early return, switch the flight mode to RTL via the Channel 5 switch or send the command from QGC. The drone will fly back to the launch point, descend, land, and auto-disarm 2 seconds after touchdown.
+
+\subsection{Post-Flight Shutdown}
+\begin{enumerate}
+    \item Confirm motors are disarmed and fully stopped
+    \item Wait 10 seconds for components to cool
+    \item Disconnect the main battery
+    \item Power off the RC transmitter
+    \item Download flight logs from QGC if needed
+    \item Inspect propellers and frame for any damage
+    \item Store the LiPo battery in a fireproof LiPo bag
+\end{enumerate}
+
+% =============================================================
 \section{Troubleshooting}
+% =============================================================
 
-This section should provide guidance for troubleshooting common issues that may arise when using the embedded system.
+\subsection{Common Issues}
 
-% section 8: support and contact information
-\section{Support and Contact Information}
+\begin{longtable}{p{3.8cm}p{4.2cm}p{5.5cm}}
+\toprule
+\textbf{Symptom} & \textbf{Likely Cause} & \textbf{Solution} \\
+\midrule
+\endhead
+Drone will not arm & Pre-flight check failure & Check QGC for red indicators; recalibrate sensors \\
+No GPS fix & Poor satellite reception & Move to open area; wait up to 10 minutes \\
+ESCs beeping continuously & No signal or not armed & Check wiring; recalibrate ESCs \\
+Altitude drifts & Barometer not warmed up & Wait 5 minutes after power-on \\
+Unstable hover or oscillations & Vibration or PID tuning & Check vibration below 30\,m/s$^2$; reset PIDs to default \\
+One side lifts first & Motor mapping incorrect & Verify motor assignments in QGC Actuators tab \\
+Drone will not take off & Low battery or weak motors & Charge battery; confirm hover throttle around 60\% \\
+Compass error & Magnetic interference & Recalibrate outdoors; move GPS mast away from power cables \\
+Telemetry lost & Radio or range issue & Check antenna orientation; reduce distance \\
+MAVROS fails to connect & USB device not found or no permission & Check \texttt{/dev/ttyACM0} exists; run \texttt{sudo chmod 666 /dev/ttyACM0} \\
+Mission script errors & Missing dependency or wrong path & Check \texttt{requirements.txt} installed; verify script path \\
+\bottomrule
+\end{longtable}
 
-This section should provide contact information for obtaining support or additional assistance with the embedded system.
+\subsection{Component-Specific Diagnostics}
 
-% appendix
+\subsubsection{Pixhawk}
+
+In QGC, go to \textbf{Analyse Tools $\rightarrow$ MAVLink Inspector} to monitor live MAVLink messages:
+
+\begin{itemize}
+    \item \texttt{VIBRATION} -- \texttt{vibration\_x/y/z} should be below 30\,m/s$^2$
+    \item \texttt{GPS\_RAW\_INT} -- satellite count, fix type, HDOP
+    \item \texttt{BATTERY\_STATUS} -- voltage, current, remaining percentage
+    \item \texttt{ATTITUDE} -- roll, pitch, yaw
+    \item \texttt{SERVO\_OUTPUT\_RAW} -- motor PWM values (should be balanced within $\pm$20\,$\mu$s)
+\end{itemize}
+
+\subsubsection{GPS Module (Holybro M9N)}
+
+If GPS does not achieve a 3D fix:
+\begin{itemize}
+    \item Move to a clear outdoor area with unobstructed sky
+    \item Wait up to 10 minutes for cold-start acquisition
+    \item Verify the GPS antenna is upright and unobstructed
+    \item Check the GPS cable connection at the Pixhawk GPS port
+    \item Confirm HDOP below 1.5 in QGC before arming
+\end{itemize}
+
+\subsubsection{RC Receiver (FlySky FS-iA6B)}
+
+If RC channels are not responding in QGC:
+\begin{itemize}
+    \item Confirm the transmitter is powered on
+    \item Check the receiver LED: solid = bound; flashing = unbound
+    \item To rebind: hold the bind button on the receiver while powering on the transmitter in bind mode (see the FS-i6 user manual \cite{flysky_fsi6} for the bind mode procedure)
+    \item Confirm receiver is in PPM mode: 2 LED flashes on power-on = PPM; 1 flash = PWM
+    \item Recalibrate RC in QGC: Vehicle Setup $\rightarrow$ Radio
+\end{itemize}
+
+\subsubsection{Telemetry Radio (RFD900x / SiK)}
+
+If QGC shows no telemetry link:
+\begin{itemize}
+    \item Check antenna connections on both the ground and air units
+    \item Verify the ground unit COM port is selected in QGC
+    \item Test at short range first ($<$10\,m)
+    \item Both units must be on the same frequency band (both 915\,MHz or both 433\,MHz)
+    \item LED status: green = linked; red = searching
+\end{itemize}
+
+\subsubsection{Jetson and MAVROS}
+
+\begin{lstlisting}[language=bash]
+# Check MAVROS connection and flight controller state
+ros2 topic echo /mavros/state
+
+# Check camera is publishing frames
+ros2 topic hz /camera/image_raw
+
+# Jetson system and GPU utilisation
+tegrastats
+
+# Check UART device is present
+ls /dev/ttyACM0
+
+# Fix UART permissions if access is denied
+sudo chmod 666 /dev/ttyACM0
+\end{lstlisting}
+
+\subsubsection{Battery and Power System}
+
+\begin{itemize}
+    \item \textbf{Check cell voltages:} Use a LiPo voltage checker on the balance connector. Fully charged = 4.2\,V per cell (16.8\,V total); minimum = 3.5\,V per cell (14.0\,V total)
+    \item \textbf{If the drone shuts down mid-flight:} Check minimum cell voltage; inspect XT60 connectors for looseness or corrosion
+\end{itemize}
+
+\subsection{Emergency Procedures}
+
+\textbf{Loss of control:}
+\begin{enumerate}
+    \item Switch to RTL mode using the Channel 5 switch or trigger it from QGC
+    \item If RTL does not engage, switch to Stabilise mode and land manually
+    \item If RC is unresponsive, the drone enters automatic failsafe RTL after 10 seconds
+\end{enumerate}
+
+\textbf{GPS lost during flight:}
+\begin{enumerate}
+    \item Drone switches automatically to Altitude Hold (maintains height but may drift)
+    \item Immediately switch to Altitude Hold or Stabilise mode on the RC
+    \item Land at the nearest safe location
+    \item Do not re-enter Position or Offboard mode without a GPS fix
+\end{enumerate}
+
+\textbf{Low battery warning:}
+\begin{enumerate}
+    \item QGC shows red battery alert and audio warning
+    \item Drone triggers automatic RTL at 20\%
+    \item Do not override -- allow it to return and land
+    \item If below 10\%, land at the nearest safe spot immediately
+\end{enumerate}
+
+\textbf{Crash or collision:}
+\begin{enumerate}
+    \item Drone auto-disarms on heavy impact
+    \item Approach cautiously (propellers may still be sharp even when stopped)
+    \item Disconnect the battery immediately
+    \item Inspect all components before attempting another flight
+    \item Download the crash log from QGC for analysis
+\end{enumerate}
+
+% =============================================================
+\section{Safety Guidelines}
+% =============================================================
+
+\subsection{Hazards}
+
+\textbf{Mechanical:}
+\begin{itemize}
+    \item Rotating propellers can cause severe lacerations -- maintain safe distance during operation
+    \item Carbon fibre frame edges are sharp -- handle with care
+    \item A 2.3\,kg drone falling from height can cause serious injury
+\end{itemize}
+
+\textbf{Electrical:}
+\begin{itemize}
+    \item LiPo batteries can catch fire if overcharged, punctured, or short-circuited
+    \item ESCs draw up to 40\,A -- never short power cables
+    \item Reversed battery polarity causes instant and irreversible component damage
+\end{itemize}
+
+\textbf{Environmental:}
+\begin{itemize}
+    \item Risk of collision with trees, buildings, people, or power lines
+    \item Flyaway risk in high wind or near GPS-blocking structures
+    \item Camera recording may raise privacy concerns -- handle data per GDPR
+\end{itemize}
+
+\subsection{Safe Operating Rules}
+
+\begin{itemize}
+    \item Establish a 50\,m safety perimeter before arming
+    \item Keep the RC transmitter in hand throughout every flight
+    \item Maintain visual line of sight at all times
+    \item Never fly over people, roads, vehicles, or buildings
+    \item Have a fireproof LiPo bag or extinguisher available when charging
+    \item Disconnect the battery immediately after landing
+    \item Store LiPo batteries in a fireproof LiPo bag when not in use
+    \item Allow motors to cool for at least 5 minutes before handling after a flight
+\end{itemize}
+
+% =============================================================
+\section{Legal and Regulatory Compliance}
+% =============================================================
+
+\subsection{EU Drone Regulations (as of 2025)}
+
+\begin{itemize}
+    \item \textbf{Registration:} Drones over 250\,g must be registered with the national aviation authority
+    \item \textbf{Operator certificate:} A2 certificate required for autonomous operations near people
+    \item \textbf{Maximum altitude:} 120\,m AGL
+    \item \textbf{No-fly zones:} Within 5\,km of airports; military installations; nuclear facilities; nature reserves (permit required)
+    \item \textbf{Privacy:} Camera data must comply with GDPR
+    \item \textbf{Insurance:} Liability insurance recommended for drones over 900\,g
+\end{itemize}
+
+\subsection{Sweden-Specific Requirements}
+
+\begin{itemize}
+    \item Register with Transportstyrelsen (Swedish Transport Agency)
+    \item Follow Luftfartsverket (Swedish CAA) regulations
+    \item Forest operations may require landowner permission
+    \item Check local restrictions before each operation
+\end{itemize}
+
+\subsection{Disclaimer}
+
+This system is an academic research prototype and carries no commercial warranty or certification. Operators are solely responsible for safe operation, regulatory compliance, and any injury or damage resulting from use.
+
+\copyright~2026 Elina Rosato, Danielis Maizelis, Kristianstad University. Custom code is released under the Apache 2 License. See the project repository for details.
+
+% =============================================================
 \appendix
-\section{Appendix}
+% =============================================================
 
-This section can include additional information that may be helpful to users, such as technical specifications, diagrams, or reference material.
+\section{Glossary}
 
-% references
+\begin{tabular}{ll}
+\toprule
+\textbf{Term} & \textbf{Definition} \\
+\midrule
+AGL & Above Ground Level \\
+CCW & Counter-Clockwise \\
+CW & Clockwise \\
+EKF & Extended Kalman Filter (sensor fusion algorithm) \\
+ESC & Electronic Speed Controller \\
+GCS & Ground Control Station \\
+GNSS & Global Navigation Satellite System \\
+HDOP & Horizontal Dilution of Precision (GPS accuracy metric; below 1.5 is good) \\
+IMU & Inertial Measurement Unit \\
+LiPo & Lithium Polymer battery \\
+MAVLink & Micro Air Vehicle communication protocol \\
+PDB & Power Distribution Board \\
+PID & Proportional-Integral-Derivative (flight control algorithm) \\
+PPM & Pulse Position Modulation (RC signal format) \\
+PWM & Pulse Width Modulation (motor control signal) \\
+ROS & Robot Operating System \\
+RTL & Return to Launch \\
+UART & Universal Asynchronous Receiver-Transmitter \\
+\bottomrule
+\end{tabular}
+
+\section{Technical Specifications}
+\label{app:specs}
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+\multicolumn{2}{l}{\textbf{Flight Performance}} \\
+Maximum flight time & 12--15 minutes \\
+Maximum speed (autonomous) & 3\,m/s \\
+Maximum speed (manual) & 5\,m/s \\
+Maximum operating altitude & 50\,m AGL \\
+Wind resistance & below 3\,m/s sustained \\
+\midrule
+\multicolumn{2}{l}{\textbf{Physical}} \\
+Total weight & 2.3\,kg (including battery) \\
+Frame diagonal & 500\,mm \\
+Overall dimensions & 550 $\times$ 550 $\times$ 200\,mm \\
+Propeller size & 10 $\times$ 4.5 inches \\
+\midrule
+\multicolumn{2}{l}{\textbf{Power}} \\
+Battery & 4S LiPo 14.8\,V 5000\,mAh \\
+Voltage range & 12.8\,V (empty) to 16.8\,V (full) \\
+Peak current draw & 60\,A (all motors) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Sensors}} \\
+GPS & Holybro M9N (GPS + GLONASS) \\
+Barometer & MS5611 ($\pm$10\,cm accuracy) \\
+Camera & Arducam IMX477, 12\,MP, 100$^\circ$ FOV, CSI \\
+\midrule
+\multicolumn{2}{l}{\textbf{Communication}} \\
+Telemetry & 915\,MHz or 433\,MHz, up to 1\,km \\
+Jetson--Pixhawk & USB serial, \texttt{/dev/ttyACM0}, MAVLink 2.0 \\
+RC & 2.4\,GHz AFHDS \\
+\midrule
+\multicolumn{2}{l}{\textbf{Computing}} \\
+Companion computer & NVIDIA Jetson Orin Nano 8\,GB \\
+GPU & 1024-core NVIDIA Ampere \\
+RAM & 8\,GB \\
+Storage & 64\,GB eMMC + microSD \\
+\bottomrule
+\end{tabular}
+
+\section{PX4 Parameter Reference}
+\label{app:params}
+
+Set these parameters after a firmware flash via \textbf{QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Parameters}.
+
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\midrule
+\texttt{SYS\_AUTOSTART} & 4014 & Holybro S500 airframe \\
+\texttt{EKF2\_HGT\_REF} & 0 & Use barometer for altitude reference \\
+\texttt{EKF2\_BARO\_NOISE} & 6.0 & Barometer noise level \\
+\texttt{MPC\_THR\_HOVER} & 0.60 & Hover throttle (60\%) \\
+\texttt{COM\_ARM\_GPS\_HDOP} & 1.5 & Maximum HDOP for arming \\
+\texttt{EKF2\_GPS\_CTRL} & 7 & GPS fusion control \\
+\texttt{COM\_ARM\_EKF\_POS} & 0.5 & EKF position check threshold \\
+\texttt{COM\_DISARM\_LAND} & 2.0 & Auto-disarm 2\,s after landing \\
+\texttt{COM\_RC\_LOSS\_T} & 1.0 & RC loss failsafe timeout (seconds) \\
+\texttt{GF\_MAX\_HOR\_DIST} & 100 & Geofence horizontal limit (m) \\
+\texttt{GF\_MAX\_VER\_DIST} & 50 & Geofence vertical limit (m) \\
+\texttt{BAT\_CRIT\_THR} & 0.20 & Critical battery threshold (20\%) \\
+\texttt{BAT\_LOW\_THR} & 0.30 & Low battery warning (30\%) \\
+\bottomrule
+\end{tabular}
+
+\section{Motor Configuration and Propeller Diagram}
+\label{app:wiring}
+
+\begin{verbatim}
+           FRONT  (Pixhawk arrow points forward)
+                         ^
+        M3 (CW)   ------   ------   M1 (CCW)
+                  |                 |
+                  |      BODY       |
+                  |                 |
+        M2 (CCW)  ------   ------   M4 (CW)
+                         v
+                        BACK
+
+  M1 Front-Right   CCW   MAIN OUT 1
+  M2 Back-Left     CW    MAIN OUT 2
+  M3 Front-Left    CW    MAIN OUT 3
+  M4 Back-Right    CCW   MAIN OUT 4
+\end{verbatim}
+
+\textbf{Propeller identification:} CCW propellers are marked with ``L'' on the hub. CW propellers are unmarked or marked ``R''. Mixing up CW and CCW propellers will cause the drone to flip on takeoff.
+
+\section{Calibration Procedures}
+\label{app:calibration}
+
+\subsection*{Accelerometer (6-Position)}
+\begin{enumerate}
+    \item QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Accelerometer
+    \item Level surface, nose pointing forward $\rightarrow$ click \textbf{Level Horizon}
+    \item Nose down, tail up 90$^\circ$ $\rightarrow$ click \textbf{Nose Down}
+    \item Nose up $\rightarrow$ click \textbf{Nose Up}
+    \item Right side down $\rightarrow$ click \textbf{Right Side Down}
+    \item Left side down $\rightarrow$ click \textbf{Left Side Down}
+    \item Upside down $\rightarrow$ click \textbf{Back}
+\end{enumerate}
+
+\subsection*{Compass}
+\begin{enumerate}
+    \item Perform outdoors, at least 2\,m from metal objects and electronics
+    \item QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Compass
+    \item Follow the on-screen instructions: rotate the drone through pitch, roll, and yaw axes
+    \item Complete all coloured segments in the sphere visualisation
+\end{enumerate}
+
+\subsection*{ESC Calibration}
+\begin{enumerate}
+    \item Remove all propellers
+    \item Disconnect main battery
+    \item QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Power $\rightarrow$ ESC Calibration $\rightarrow$ Start
+    \item Move throttle stick to maximum on the RC transmitter
+    \item Connect the main battery -- ESCs emit confirmation beeps
+    \item Move throttle stick to minimum -- ESCs emit a second confirmation
+    \item Disconnect battery; calibration is complete
+\end{enumerate}
+
+\subsection*{RC Radio Calibration}
+\begin{enumerate}
+    \item QGC $\rightarrow$ Vehicle Setup $\rightarrow$ Radio
+    \item Move all sticks to their full extents (all four corners)
+    \item Move all switches through all positions
+    \item Click \textbf{Next} to complete
+\end{enumerate}
+
+\section{Maintenance Schedule}
+\label{app:maintenance}
+
+\subsection*{Before Every Flight}
+\begin{itemize}
+    \item Visual inspection for cracks, loose screws, or damaged propellers
+    \item Check propeller tightness
+    \item Check battery voltage and condition
+\end{itemize}
+
+\subsection*{After Every 10 Flights}
+\begin{itemize}
+    \item Re-tighten all screws (motors, frame, propellers)
+    \item Spin-test motors by hand -- smooth with no grinding indicates healthy bearings
+    \item Clean camera lens
+    \item Inspect carbon fibre arms for delamination or micro-cracks
+\end{itemize}
+
+\subsection*{After Every 50 Flights}
+\begin{itemize}
+    \item Replace propellers (they degrade with use)
+    \item Inspect ESC solder joints for cold joints or cracking
+    \item Recalibrate compass and accelerometer
+    \item Update Pixhawk firmware if a new stable release is available
+\end{itemize}
+
+\subsection*{Annually}
+\begin{itemize}
+    \item Replace LiPo battery (capacity degrades with charge cycles)
+    \item Replace motor bearings if grinding is detected
+    \item Full system inspection and test flight before field operations
+\end{itemize}
+
+\section{Emergency and Support Contacts}
+\label{app:contacts}
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Contact} & \textbf{Details} \\
+\midrule
+Emergency services (Sweden) & 112 \\
+Transportstyrelsen (aviation authority) & +46 771-503 503 \\
+Kristianstad University security & Contact university main switchboard \\
+\midrule
+Elina Rosato & \href{mailto:elina.rosato0053@stud.hkr.se}{elina.rosato0053@stud.hkr.se} \\
+Danielis Maizelis & \href{mailto:danielis.maizelis@stud.hkr.se}{danielis.maizelis@stud.hkr.se} \\
+\midrule
+Drone scripts (Jetson) & \url{https://github.com/autonomous-forest-drone/drone-brain} \\
+GCS scripts (monitoring computer) & \url{https://github.com/autonomous-forest-drone/ground-control-station} \\
+PX4 documentation & \url{https://docs.px4.io} \\
+MAVROS documentation & \url{https://wiki.ros.org/mavros} \\
+QGC documentation & \url{https://docs.qgroundcontrol.com} \\
+Swedish drone regulations & \url{https://transportstyrelsen.se/dronare} \\
+EU drone regulations & \url{https://www.easa.europa.eu/drones} \\
+\bottomrule
+\end{tabular}
+
 \begin{thebibliography}{9}
-\bibitem{example}
-    Author,
-    \emph{Title},
-    Publisher, Year.
+\bibitem{px4}
+    PX4 Development Team,
+    \emph{PX4 Autopilot User Guide},
+    \url{https://docs.px4.io}, 2024.
+\bibitem{mavros}
+    MAVROS Contributors,
+    \emph{MAVROS ROS Package},
+    \url{https://wiki.ros.org/mavros}, 2024.
+\bibitem{eu_drone}
+    European Union Aviation Safety Agency,
+    \emph{Easy Access Rules for Unmanned Aircraft Systems},
+    EASA, 2024.
+\bibitem{transportstyrelsen}
+    Transportstyrelsen,
+    \emph{Regulations for UAS Operations in Sweden},
+    \url{https://transportstyrelsen.se/dronare}, 2024.
+\bibitem{flysky_fsi6}
+    FlySky,
+    \emph{FS-i6 2.4G 6CH AFHDS RC Transmitter User Manual},
+    FlySky Model Co., Ltd.
 \end{thebibliography}
-
 
 \end{document}
