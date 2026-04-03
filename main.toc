@@ -40,7 +40,7 @@
 \contentsline {subsection}{\numberline {8.1}Common Issues}{18}{subsection.8.1}%
 \contentsline {subsection}{\numberline {8.2}Component-Specific Diagnostics}{18}{subsection.8.2}%
 \contentsline {subsubsection}{\numberline {8.2.1}Pixhawk}{18}{subsubsection.8.2.1}%
-\contentsline {subsubsection}{\numberline {8.2.2}GPS Module (Holybro M9N)}{18}{subsubsection.8.2.2}%
+\contentsline {subsubsection}{\numberline {8.2.2}GPS Module (Holybro M10)}{18}{subsubsection.8.2.2}%
 \contentsline {subsubsection}{\numberline {8.2.3}RC Receiver (FlySky FS-iA6B)}{19}{subsubsection.8.2.3}%
 \contentsline {subsubsection}{\numberline {8.2.4}Telemetry Radio (RFD900x / SiK)}{19}{subsubsection.8.2.4}%
 \contentsline {subsubsection}{\numberline {8.2.5}Jetson and MAVROS}{19}{subsubsection.8.2.5}%
@@ -50,7 +50,7 @@
 \contentsline {subsection}{\numberline {9.1}Hazards}{20}{subsection.9.1}%
 \contentsline {subsection}{\numberline {9.2}Safe Operating Rules}{21}{subsection.9.2}%
 \contentsline {section}{\numberline {10}Legal and Regulatory Compliance}{21}{section.10}%
-\contentsline {subsection}{\numberline {10.1}EU Drone Regulations (as of 2025)}{21}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.1}EU Drone Regulations (as of 2026)}{21}{subsection.10.1}%
 \contentsline {subsection}{\numberline {10.2}Sweden-Specific Requirements}{22}{subsection.10.2}%
 \contentsline {subsection}{\numberline {10.3}Disclaimer}{22}{subsection.10.3}%
 \contentsline {section}{\numberline {A}Glossary}{22}{appendix.A}%
@@ -59,4 +59,3 @@
 \contentsline {section}{\numberline {D}Motor Configuration and Propeller Diagram}{24}{appendix.D}%
 \contentsline {section}{\numberline {E}Calibration Procedures}{25}{appendix.E}%
 \contentsline {section}{\numberline {F}Maintenance Schedule}{26}{appendix.F}%
-\contentsline {section}{\numberline {G}Emergency and Support Contacts}{27}{appendix.G}%

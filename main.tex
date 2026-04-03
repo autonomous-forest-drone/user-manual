@@ -159,7 +159,7 @@ This section lists all hardware components with their exact names and models. Th
 \textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
 \midrule
 7  & Flight controller & Holybro Pixhawk 6C & Main autopilot \\
-8  & GPS module & Holybro M9N GPS with compass & Dual GNSS (GPS + GLONASS) \\
+8  & GPS module & Holybro M10 GPS with compass & Dual GNSS (GPS + GLONASS) \\
 9  & Telemetry radio & RFD900x or SiK Radio & 915\,MHz or 433\,MHz \\
 10 & Power module & Holybro PM02 & Voltage and current sensing \\
 11 & RC receiver & FlySky FS-iA6B & PPM mode, 6 channels \\
@@ -705,7 +705,7 @@ In QGC, go to \textbf{Analyse Tools $\rightarrow$ MAVLink Inspector} to monitor 
     \item \texttt{SERVO\_OUTPUT\_RAW} -- motor PWM values (should be balanced within $\pm$20\,$\mu$s)
 \end{itemize}
 
-\subsubsection{GPS Module (Holybro M9N)}
+\subsubsection{GPS Module (Holybro M10)}
 
 If GPS does not achieve a 3D fix:
 \begin{itemize}
@@ -842,7 +842,7 @@ sudo chmod 666 /dev/ttyACM0
 \section{Legal and Regulatory Compliance}
 % =============================================================
 
-\subsection{EU Drone Regulations (as of 2025)}~\cite{eu_drone}
+\subsection{EU Drone Regulations (as of 2026)}~\cite{eu_drone}
 
 \begin{itemize}
     \item \textbf{Registration:} Drones over 250\,g must be registered with the national aviation authority
@@ -925,7 +925,7 @@ Voltage range & 12.8\,V (empty) to 16.8\,V (full) \\
 Peak current draw & 60\,A (all motors) \\
 \midrule
 \multicolumn{2}{l}{\textbf{Sensors}} \\
-GPS & Holybro M9N (GPS + GLONASS) \\
+GPS & Holybro M10 (GPS + GLONASS) \\
 Barometer & MS5611 ($\pm$10\,cm accuracy) \\
 Camera & Arducam IMX477, 12\,MP, 100$^\circ$ FOV, CSI \\
 \midrule
@@ -1066,30 +1066,6 @@ M4 & Back-Right  & CCW & 4 \\
     \item Full system inspection and test flight before field operations
 \end{itemize}
 
-\section{Emergency and Support Contacts}
-\label{app:contacts}
-
-\begin{tabular}{ll}
-\toprule
-\textbf{Contact} & \textbf{Details} \\
-\midrule
-Emergency services (Sweden) & 112 \\
-Transportstyrelsen (aviation authority) & +46 771-503 503 \\
-Kristianstad University security & Contact university main switchboard \\
-\midrule
-Elina Rosato & \href{mailto:elina.rosato0053@stud.hkr.se}{elina.rosato0053@stud.hkr.se} \\
-Danielis Maizelis & \href{mailto:danielis.maizelis@stud.hkr.se}{danielis.maizelis@stud.hkr.se} \\
-\midrule
-Drone scripts (Jetson) & \url{https://github.com/autonomous-forest-drone/drone-brain} \\
-GCS scripts (monitoring computer) & \url{https://github.com/autonomous-forest-drone/ground-control-station} \\
-PX4 documentation & \url{https://docs.px4.io} \\
-ROS 2 Humble documentation & \url{https://docs.ros.org/en/humble/} \\
-MAVROS (ROS 2) & \url{https://github.com/mavlink/mavros} \\
-QGC documentation & \url{https://docs.qgroundcontrol.com} \\
-Swedish drone regulations & \url{https://transportstyrelsen.se/dronare} \\
-EU drone regulations & \url{https://www.easa.europa.eu/drones} \\
-\bottomrule
-\end{tabular}
 
 \begin{thebibliography}{9}
 \bibitem{px4}
