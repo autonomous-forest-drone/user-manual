@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1775219767.28487 "/Users/admin/Sites/user-manual/main.tex" "main.pdf" "main" 1775219768.90965 0
-  "/Users/admin/Sites/user-manual/main.tex" 1775219765.04864 44335 34b2b8c3fc88a5ec91d3a1cf7277fb67 ""
+["pdflatex"] 1775220181.57139 "/Users/admin/Sites/user-manual/main.tex" "main.pdf" "main" 1775220183.0843 0
+  "/Users/admin/Sites/user-manual/main.tex" 1775220179.52533 44527 f5f673db190e20d151ce5a8bac28e7a1 ""
   "/usr/local/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1772380719 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/Cellar/texlive/20260301/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772380719 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1772380719 5541360 f183aac233c4cd1e5ef882fcbe8e7096 ""
@@ -118,10 +118,10 @@
   "assets/drone-overview.png" 1775218988.3872 1613554 67c5cc8bf1ff3a179871df0317e9a30c ""
   "assets/motors-direction.jpeg" 1775218988.38886 68765 25f8bfe67650135e72240a6ea925183d ""
   "assets/setup-workflow-flowchart.png" 1775218988.39008 116030 a9ecfe638d48f55d704becea309f7573 ""
-  "main.aux" 1775219768.75252 10605 1ba7ea8ba5c559779191cb87ee625cd6 "pdflatex"
-  "main.out" 1775219768.75463 10534 bba1acf28692befc70d5fda397c1c13e "pdflatex"
-  "main.tex" 1775219765.04864 44335 34b2b8c3fc88a5ec91d3a1cf7277fb67 ""
-  "main.toc" 1775219768.75499 5413 eb32bb2727ba14dccfa45106f5eac293 "pdflatex"
+  "main.aux" 1775220182.93545 10631 0c68b06fa1251c7c8f1e46d4d4f84823 "pdflatex"
+  "main.out" 1775220182.93774 10534 bba1acf28692befc70d5fda397c1c13e "pdflatex"
+  "main.tex" 1775220179.52533 44527 f5f673db190e20d151ce5a8bac28e7a1 ""
+  "main.toc" 1775220182.93821 5413 52830fa90eb40232f29f967387cd4691 "pdflatex"
   (generated)
   "main.aux"
   "main.log"

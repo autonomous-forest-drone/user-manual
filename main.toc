@@ -57,6 +57,6 @@
 \contentsline {section}{\numberline {B}Technical Specifications}{23}{appendix.B}%
 \contentsline {section}{\numberline {C}PX4 Parameter Reference}{23}{appendix.C}%
 \contentsline {section}{\numberline {D}Motor Configuration and Propeller Diagram}{24}{appendix.D}%
-\contentsline {section}{\numberline {E}Calibration Procedures}{24}{appendix.E}%
-\contentsline {section}{\numberline {F}Maintenance Schedule}{25}{appendix.F}%
-\contentsline {section}{\numberline {G}Emergency and Support Contacts}{26}{appendix.G}%
+\contentsline {section}{\numberline {E}Calibration Procedures}{25}{appendix.E}%
+\contentsline {section}{\numberline {F}Maintenance Schedule}{26}{appendix.F}%
+\contentsline {section}{\numberline {G}Emergency and Support Contacts}{27}{appendix.G}%
