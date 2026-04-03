@@ -143,7 +143,7 @@ This section lists all hardware components with their exact names and models. Th
 \toprule
 \textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
 \midrule
-1 & Frame & Holybro S500 V2 Quadcopter Kit & 500\,mm diagonal \\
+1 & Frame & Holybro S500 V2 Quadcopter Kit~\cite{holybro_s500} & 500\,mm diagonal \\
 2 & Motors ($\times$4) & Holybro 2216 880KV Brushless Motor & 4 required \\
 3 & ESCs ($\times$4) & 40\,A Electronic Speed Controller & Included in S500 V2 kit \\
 4 & Propellers CW ($\times$2) & 1045 Propeller (10-inch, 4.5-pitch, CW) & Unmarked or marked ``R'' \\
@@ -206,10 +206,10 @@ This section lists all hardware components with their exact names and models. Th
 \subsection{Onboard Software}
 
 \textbf{Pixhawk}\\
-\texttt{PX4 Autopilot v1.14+}: Open-source flight stack managing low-level flight control, sensor fusion, geofencing, and safety features. The Pixhawk comes pre-flashed and ready to use. To update the firmware to a newer version, see Section~\ref{sec:firmware}.
+\texttt{PX4 Autopilot v1.14+}~\cite{px4}: Open-source flight stack managing low-level flight control, sensor fusion, geofencing, and safety features. The Pixhawk comes pre-flashed and ready to use. To update the firmware to a newer version, see Section~\ref{sec:firmware}.
 
 \textbf{NVIDIA Jetson Orin Nano}\\
-\texttt{ROS 2 with MAVROS}: communicates with the Pixhawk via \texttt{/dev/ttyACM0}\\
+\texttt{ROS 2 Humble}~\cite{ros2humble} \texttt{with MAVROS}~\cite{mavros}: communicates with the Pixhawk via \texttt{/dev/ttyACM0}\\
 \texttt{Drone Brain}: Repository with autonomous missions, tests and helper scripts. This repository is actively developed. For the current list of available missions, tests, and helpers, refer to the repository README and the \texttt{docs/} folder. See Section~\ref{sec:repos} for setup instructions.
 
 Download: \url{https://github.com/autonomous-forest-drone/drone-brain}
@@ -842,7 +842,7 @@ sudo chmod 666 /dev/ttyACM0
 \section{Legal and Regulatory Compliance}
 % =============================================================
 
-\subsection{EU Drone Regulations (as of 2025)}
+\subsection{EU Drone Regulations (as of 2025)}~\cite{eu_drone}
 
 \begin{itemize}
     \item \textbf{Registration:} Drones over 250\,g must be registered with the national aviation authority
@@ -856,7 +856,7 @@ sudo chmod 666 /dev/ttyACM0
 \subsection{Sweden-Specific Requirements}
 
 \begin{itemize}
-    \item Register with Transportstyrelsen (Swedish Transport Agency)
+    \item Register with Transportstyrelsen (Swedish Transport Agency)~\cite{transportstyrelsen}
     \item Follow Luftfartsverket (Swedish CAA) regulations
     \item Forest operations may require landowner permission
     \item Check local restrictions before each operation
@@ -1083,7 +1083,8 @@ Danielis Maizelis & \href{mailto:danielis.maizelis@stud.hkr.se}{danielis.maizeli
 Drone scripts (Jetson) & \url{https://github.com/autonomous-forest-drone/drone-brain} \\
 GCS scripts (monitoring computer) & \url{https://github.com/autonomous-forest-drone/ground-control-station} \\
 PX4 documentation & \url{https://docs.px4.io} \\
-MAVROS documentation & \url{https://wiki.ros.org/mavros} \\
+ROS 2 Humble documentation & \url{https://docs.ros.org/en/humble/} \\
+MAVROS (ROS 2) & \url{https://github.com/mavlink/mavros} \\
 QGC documentation & \url{https://docs.qgroundcontrol.com} \\
 Swedish drone regulations & \url{https://transportstyrelsen.se/dronare} \\
 EU drone regulations & \url{https://www.easa.europa.eu/drones} \\
@@ -1095,10 +1096,14 @@ EU drone regulations & \url{https://www.easa.europa.eu/drones} \\
     PX4 Development Team,
     \emph{PX4 Autopilot User Guide},
     \url{https://docs.px4.io}, 2024.
+\bibitem{ros2humble}
+    Open Robotics,
+    \emph{ROS 2 Humble Hawksbill Documentation},
+    \url{https://docs.ros.org/en/humble/}, 2024.
 \bibitem{mavros}
     MAVROS Contributors,
-    \emph{MAVROS ROS Package},
-    \url{https://wiki.ros.org/mavros}, 2024.
+    \emph{MAVROS -- MAVLink extendable communication node for ROS 2},
+    \url{https://github.com/mavlink/mavros}, 2024.
 \bibitem{eu_drone}
     European Union Aviation Safety Agency,
     \emph{Easy Access Rules for Unmanned Aircraft Systems},
@@ -1111,6 +1116,10 @@ EU drone regulations & \url{https://www.easa.europa.eu/drones} \\
     FlySky,
     \emph{FS-i6 2.4G 6CH AFHDS RC Transmitter User Manual},
     FlySky Model Co., Ltd.
+\bibitem{holybro_s500}
+    Holybro,
+    \emph{S500 V2 Development Kit User Guide},
+    \url{https://holybro.com/products/s500-v2-development-kit}, 2024.
 \end{thebibliography}
 
 \end{document}
