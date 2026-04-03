@@ -10,6 +10,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{amssymb}
+\usepackage{float}
 \usepackage{booktabs}
 \usepackage{longtable}
 
@@ -131,9 +132,7 @@ This section lists all hardware components with their exact names and models. Th
 
 \begin{figure}[h]
     \centering
-    % Replace the placeholder below with your annotated drone image:
-    % \includegraphics[width=0.8\textwidth]{drone-diagram.png}
-    \framebox[0.8\textwidth]{\rule{0pt}{6cm}\hfill\textit{[Insert annotated drone diagram here]}\hfill}
+    \includegraphics[width=0.8\textwidth]{assets/drone-overview.png}
     \caption{Drone component reference diagram}
     \label{fig:drone-diagram}
 \end{figure}
@@ -191,6 +190,15 @@ This section lists all hardware components with their exact names and models. Th
 \bottomrule
 \end{tabular}
 
+\subsection{Exploded View and Connector Map}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{assets/connection_diagram.png}
+    \caption{Exploded view showing modules, connector types, and wiring}
+    \label{fig:exploded-view}
+\end{figure}
+
 % =============================================================
 \section{Software Overview}
 % =============================================================
@@ -227,149 +235,163 @@ The \texttt{ground-control-station} repository runs on the monitoring computer. 
 
 Download: \url{https://github.com/autonomous-forest-drone/ground-control-station}
 
-\subsection{Communication Architecture}
-
-\begin{itemize}
-    \item \textbf{Pixhawk $\leftrightarrow$ QGC:} Via telemetry radio (433\,MHz), up to 1\,km range
-    \item \textbf{Pixhawk $\leftrightarrow$ Jetson:} USB serial on \texttt{/dev/ttyACM0}, MAVLink 2.0
-    \item \textbf{Jetson $\leftrightarrow$ Operator:} WiFi SSH (ground use only -- not active during flight)
-\end{itemize}
-
 % =============================================================
 \section{Setup and Configuration}
 % =============================================================
 
-\subsection{Installing QGroundControl}
+This section is written as an onboarding workflow. Complete the subsections in order. Figure~\ref{fig:setup-flow} provides an overview of the full sequence.
 
-Download the installer for your platform from \url{https://qgroundcontrol.com} and follow the on-screen instructions. QGC is available for Windows, macOS, and Linux.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{assets/setup-workflow-flowchart.png}
+    \caption{Setup workflow: onboarding sequence from QGC install to operational readiness}
+    \label{fig:setup-flow}
+\end{figure}
 
-\subsection{Flashing or Reflashing the Pixhawk Firmware}
+\subsection{Setup Guide 1: QGroundControl and Pixhawk}
 \label{sec:firmware}
 
-Reflashing is required when:
+\textbf{Prerequisites:}
 \begin{itemize}
-    \item Setting up a new or replacement Pixhawk 6C
-    \item Upgrading to a newer PX4 stable release
-    \item Recovering from corrupted firmware
+    \item Pixhawk disconnected from propellers and main battery
+    \item Micro-USB cable
+    \item Ground control computer with internet access
 \end{itemize}
 
-\textbf{Steps:}
-\begin{enumerate}
-    \item Disconnect the main battery
-    \item Connect the Pixhawk to your computer using a Micro-USB cable
-    \item Open QGroundControl -- it detects the Pixhawk automatically
-    \item Go to \textbf{Vehicle Setup $\rightarrow$ Firmware}
-    \item Select \textbf{PX4 Flight Stack -- Stable Release}
-    \item Click \textbf{OK} and wait for the flash to complete (the Pixhawk will reboot)
-    \item When prompted, select airframe: \textbf{Holybro S500} or \textbf{Generic Quadrotor X}
-\end{enumerate}
+\textbf{Step 1 -- Install QGroundControl}
 
-\textbf{Important:} Reflashing resets all parameters to factory defaults. You must recalibrate sensors and re-apply all parameters afterward. See Section~\ref{sec:calibration} for calibration steps and Appendix~\ref{app:params} for the required parameter values.
+Download and install QGroundControl from \url{https://qgroundcontrol.com}.
 
-\subsection{Sensor Calibration in QGroundControl}
+
+\textbf{Step 2 -- Connect Pixhawk and verify detection}
+
+Connect Pixhawk to the computer by Micro-USB and open QGroundControl.
+
+\textbf{Step 3 -- Flash or upgrade PX4 firmware (only if necessary)}
+
+The Pixhawk comes pre-flashed and ready to use. This step is only required if you are setting up a replacement unit, recovering from corrupted firmware, or upgrading to a newer PX4 stable release.
+
+Go to \textbf{Vehicle Setup $\rightarrow$ Firmware}, select \textbf{PX4 Flight Stack -- Stable Release}, then confirm flash.
+
+When prompted, choose airframe \textbf{Holybro S500} (or \textbf{Generic Quadrotor X} if S500 is unavailable).
+
+\textbf{Step 4 -- Run calibration sequence}
 \label{sec:calibration}
 
-After a firmware flash, or if QGC displays calibration warnings, complete these in order:
-
+In QGC, run the following in order:
 \begin{enumerate}
-    \item \textbf{Accelerometer} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Accelerometer. Follow the 6-position procedure on a level surface.
-    \item \textbf{Compass} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Compass. Perform outdoors, away from metal and electronics. Rotate the drone through all axes as shown in QGC.
-    \item \textbf{Radio (RC)} -- Vehicle Setup $\rightarrow$ Radio. Move all sticks and switches to their full extents to set channel ranges.
-    \item \textbf{Flight Modes} -- Vehicle Setup $\rightarrow$ Flight Modes. Assign modes to the Channel 5 switch.
-    \item \textbf{ESC Calibration} -- Vehicle Setup $\rightarrow$ Power $\rightarrow$ ESC Calibration. Remove propellers first.
+    \item \textbf{Accelerometer} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Accelerometer
+    \item \textbf{Compass} -- Vehicle Setup $\rightarrow$ Sensors $\rightarrow$ Compass (perform outdoors, away from metal objects and electronics)
+    \item \textbf{Radio (RC)} -- Vehicle Setup $\rightarrow$ Radio
+    \item \textbf{Flight Modes} -- Vehicle Setup $\rightarrow$ Flight Modes
+    \item \textbf{ESC Calibration} -- Vehicle Setup $\rightarrow$ Power $\rightarrow$ ESC Calibration (propellers removed)
 \end{enumerate}
 
-Detailed step-by-step instructions for each calibration are in Appendix~\ref{app:calibration}.
+\textbf{Step 5 -- Apply PX4 parameters}
 
-\subsection{Connecting to the Jetson via WiFi and SSH}
+Open \textbf{Vehicle Setup $\rightarrow$ Parameters} and set all required values listed in Appendix~\ref{app:params}.
+
+
+\textbf{Step 6 -- Save and verify configuration}
+
+Export parameters to a backup file and reboot Pixhawk once.
+
+
+\textbf{Important:} Firmware flashing resets parameters to defaults. Always repeat Step 4 and Step 5 after reflashing. Detailed calibration actions are in Appendix~\ref{app:calibration}.
+
+\subsection{Setup Guide 2: Jetson Network and SSH Access}
 \label{sec:ssh}
 
-SSH is used during ground operations to manage scripts, launch ROS nodes, and view logs. The Jetson must be connected to the same WiFi network as your computer.
+\textbf{Prerequisites:}
+\begin{itemize}
+    \item Jetson powered and connected to Pixhawk via USB
+    \item Same WiFi network available for Jetson and operator computer
+\end{itemize}
 
-\textbf{Find the Jetson's IP address} (if unknown):
+\textbf{Step 1 -- Connect Jetson to internet}
 
-If a monitor is available, connect it to the Jetson and run:
+On the Jetson, run:
+\begin{lstlisting}[language=bash]
+nmcli device wifi list
+nmcli device wifi connect "NetworkName" password "yourpassword"
+nmcli connection show
+\end{lstlisting}
+
+
+\textbf{Step 2 -- Find Jetson IP address}
+
+Run on the Jetson:
 \begin{lstlisting}[language=bash]
 ip addr show
 \end{lstlisting}
 
-To scan the local network from another machine:
-\begin{lstlisting}[language=bash]
-nmap -sn 192.168.1.0/24    # adjust subnet as needed
-\end{lstlisting}
+Record the IPv4 address for the active WiFi interface.
 
-\textbf{Connect via SSH:}
+
+\textbf{Step 3 -- SSH from operator computer}
+
 \begin{lstlisting}[language=bash]
 ssh beetlesniffer@<jetson-ip-address>
 \end{lstlisting}
 
-\textbf{Configure WiFi on the Jetson (if needed):}
+
+\textbf{Step 4 -- Verify Pixhawk serial link}
+
+On the Jetson, run:
 \begin{lstlisting}[language=bash]
-# List available networks
-nmcli device wifi list
-
-# Connect to a network
-nmcli device wifi connect "NetworkName" password "yourpassword"
-
-# Verify connection
-nmcli connection show
+ls /dev/ttyACM*
 \end{lstlisting}
 
-\textbf{Set a static IP (recommended for consistent SSH access):}
+
+\textbf{Optional (recommended):} set a static IP for consistent SSH access.
 \begin{lstlisting}[language=bash]
 nmcli connection modify "NetworkName" ipv4.addresses 192.168.1.100/24
 nmcli connection modify "NetworkName" ipv4.method manual
 nmcli connection up "NetworkName"
 \end{lstlisting}
 
-\subsection{Setting Up the Repositories}
+\subsection{Setup Guide 3: Repository Clone, Update, and Version Control}
 \label{sec:repos}
 
-There are two repositories. Each must be cloned on the correct machine. Because both are actively developed, always read the README inside each repository for the most up-to-date setup instructions and the current list of available scripts.
+Both repositories are actively developed. Use a pinned tag or commit for repeatable field deployments, and record the chosen versions in mission documentation.
 
-\subsubsection{drone-brain (clone on the Jetson)}
+\textbf{Step 1 -- Clone repositories (first-time setup)}
 
-SSH into the Jetson (see Section~\ref{sec:ssh}), then:
-
+On the Jetson:
 \begin{lstlisting}[language=bash]
-# Clone the repository (first time only)
 git clone https://github.com/autonomous-forest-drone/drone-brain.git ~/drone-brain
-
-# Install Python dependencies
 cd ~/drone-brain
 pip3 install -r requirements.txt
 \end{lstlisting}
 
-Repository: \url{https://github.com/autonomous-forest-drone/drone-brain}
-
-\subsubsection{ground-control-station (clone on the monitoring computer)}
-
-Run the following on the ground monitoring computer:
-
+On the monitoring computer:
 \begin{lstlisting}[language=bash]
-# Clone the repository (first time only)
 git clone https://github.com/autonomous-forest-drone/ground-control-station.git ~/ground-control-station
-
-# Install Python dependencies (once a requirements.txt is available)
 cd ~/ground-control-station
 pip3 install -r requirements.txt
 \end{lstlisting}
 
-Repository: \url{https://github.com/autonomous-forest-drone/ground-control-station}
+After cloning each repository, \textbf{read the README carefully and follow its setup instructions} before proceeding. The README is the authoritative source for any additional dependencies or configuration steps specific to that repository.
 
-\subsubsection{Updating Either Repository}
+\textbf{Step 2 -- Update repositories (existing installations)}
 
-To pull the latest scripts on either machine:
+On each machine:
 \begin{lstlisting}[language=bash]
 cd ~/drone-brain          # or ~/ground-control-station
+git fetch --all --tags
 git pull origin main
 \end{lstlisting}
 
-If you have local changes to discard before pulling:
+\textbf{Step 3 -- Check out approved version}
+
+Use the exact version chosen by your team:
 \begin{lstlisting}[language=bash]
-git stash
-git pull origin main
+git checkout <tag-or-commit>
 \end{lstlisting}
+
+\textbf{Step 4 -- Run a quick sanity check}
+
+Run each repository's README quick-start commands and confirm no startup errors before flight-day operations.
 
 % =============================================================
 \section{Pre-Flight Checklist}
@@ -948,22 +970,25 @@ Set these parameters after a firmware flash via \textbf{QGC $\rightarrow$ Vehicl
 \section{Motor Configuration and Propeller Diagram}
 \label{app:wiring}
 
-\begin{verbatim}
-           FRONT  (Pixhawk arrow points forward)
-                         ^
-        M3 (CW)   ------   ------   M1 (CCW)
-                  |                 |
-                  |      BODY       |
-                  |                 |
-        M2 (CCW)  ------   ------   M4 (CW)
-                         v
-                        BACK
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/motors-direction.jpeg}
+    \caption{Motor positions, rotation directions, and MAIN OUT port assignments}
+    \label{fig:motor-diagram}
+\end{figure}
 
-  M1 Front-Right   CCW   MAIN OUT 1
-  M2 Back-Left     CW    MAIN OUT 2
-  M3 Front-Left    CW    MAIN OUT 3
-  M4 Back-Right    CCW   MAIN OUT 4
-\end{verbatim}
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Motor} & \textbf{Position} & \textbf{Direction} & \textbf{MAIN OUT} \\
+\midrule
+M1 & Front-Right & CCW & 1 \\
+M2 & Back-Left   & CW  & 2 \\
+M3 & Front-Left  & CW  & 3 \\
+M4 & Back-Right  & CCW & 4 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \textbf{Propeller identification:} CCW propellers are marked with ``L'' on the hub. CW propellers are unmarked or marked ``R''. Mixing up CW and CCW propellers will cause the drone to flip on takeoff.
 
