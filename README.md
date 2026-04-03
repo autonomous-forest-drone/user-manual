@@ -39,3 +39,6 @@ Install the [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName
 ```bash
 pdflatex main.tex
 ```
+
+For more guidance on how to run and compile LaTeX locally, watch this video: [Easy LaTeX Documents in VSCode
+](https://www.youtube.com/watch?v=Mty0vHb0knI)
