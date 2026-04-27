@@ -1,0 +1,52 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {section}{\numberline {2}System Architecture}{4}{section.2}%
+\contentsline {section}{\numberline {3}Hardware Assembly}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Bill of Materials}{4}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Purchased Components}{4}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}3D Printed Parts}{5}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}Tools Required}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Assembly Guide}{6}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Step 1 -- Frame}{6}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Step 2 -- Motors}{6}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Step 3 -- Propeller Guards}{7}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Step 4 -- Battery Mount and Power Module}{7}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Step 5 -- Jetson Orin Nano}{7}{subsubsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {3.3.6}Step 6 -- Pixhawk with Vibration Dampening}{7}{subsubsection.3.3.6}%
+\contentsline {subsubsection}{\numberline {3.3.7}Step 7 -- Telemetry Radio}{7}{subsubsection.3.3.7}%
+\contentsline {subsubsection}{\numberline {3.3.8}Step 8 -- RC Receiver}{8}{subsubsection.3.3.8}%
+\contentsline {subsubsection}{\numberline {3.3.9}Step 9 -- Camera Mount and Camera}{8}{subsubsection.3.3.9}%
+\contentsline {subsubsection}{\numberline {3.3.10}Step 10 -- RC Receiver Binding}{8}{subsubsection.3.3.10}%
+\contentsline {subsubsection}{\numberline {3.3.11}Step 11 -- GPS Mast and GPS Module}{8}{subsubsection.3.3.11}%
+\contentsline {section}{\numberline {4}Wiring Guide}{9}{section.4}%
+\contentsline {section}{\numberline {5}Pixhawk Configuration}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Firmware and Airframe}{10}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Battery Configuration}{10}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Calibration Sequence}{10}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Failsafe Configuration}{11}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Parameter Configuration}{11}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Software Setup}{11}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Jetson Orin Nano Environment}{11}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}ROS 2 Humble and MAVROS}{11}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Camera Setup (Arducam IMX477)}{12}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}drone-brain Repository}{12}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}ground-control-station Repository}{13}{subsection.6.5}%
+\contentsline {section}{\numberline {7}Commissioning and Testing}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Safety Setup for Outdoor Testing}{13}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Test Sequence}{14}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}Test 1 -- Motor Test (No Propellers)}{14}{subsubsection.7.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2}Test 2 -- RC Channel Verification}{14}{subsubsection.7.2.2}%
+\contentsline {subsubsection}{\numberline {7.2.3}Test 3 -- Arm-Only Script}{14}{subsubsection.7.2.3}%
+\contentsline {subsubsection}{\numberline {7.2.4}Test 4 -- Takeoff with Manual Intercept}{14}{subsubsection.7.2.4}%
+\contentsline {subsubsection}{\numberline {7.2.5}Test 5 -- Takeoff and Land}{15}{subsubsection.7.2.5}%
+\contentsline {subsubsection}{\numberline {7.2.6}Test 6 -- Takeoff, Move Forward, Land}{15}{subsubsection.7.2.6}%
+\contentsline {subsubsection}{\numberline {7.2.7}Test 7 -- Full Movement Test}{15}{subsubsection.7.2.7}%
+\contentsline {subsubsection}{\numberline {7.2.8}Test 8 -- GPS Position Navigation}{15}{subsubsection.7.2.8}%
+\contentsline {subsubsection}{\numberline {7.2.9}Test 9 -- Camera Tests}{15}{subsubsection.7.2.9}%
+\contentsline {section}{\numberline {8}Known Limitations}{16}{section.8}%
+\contentsline {subsection}{\numberline {8.1}GPS Accuracy Under Forest Canopy}{16}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Weather Dependency}{16}{subsection.8.2}%
+\contentsline {section}{\numberline {9}Future Work}{16}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Positioning Under Canopy}{16}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Image Transmission}{16}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Repository and Access Summary}{17}{section.10}%
