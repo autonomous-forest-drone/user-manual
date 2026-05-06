@@ -168,7 +168,7 @@ Assemble the Holybro S500 V2 frame following the kit instructions:
 \subsubsection{Step 2 -- Motors}
 
 \begin{enumerate}
-    \item Install the four Holybro 2216 880KV brushless motors on the arm motor mounts following the CW/CCW positions specified for the S500 V2 kit (see the motor diagram in the User Manual, Appendix~B).
+    \item Install the four Holybro 2216 880KV brushless motors on the arm motor mounts following the CW/CCW positions specified for the S500 V2 kit (see the motor diagram in the User Manual, Appendix~D).
     \item \textbf{Do not fully tighten the motor screws yet} -- the propeller guards are installed in the next step and require replacing the screws.
 \end{enumerate}
 
@@ -400,7 +400,7 @@ ls -l /dev/ttyTHS1
 
 \subsection{Camera Setup (Arducam IMX219)}
 
-The Arducam IMX219 connects to the Jetson CSI0 port via the 22-pin to 15-pin ribbon cable. Install the Arducam driver:
+The Arducam IMX219 connects to the Jetson CSI0 port via the 22-pin to 15-pin ribbon cable. Install the Arducam driver~\cite{arducam_imx219}:
 
 \begin{lstlisting}[language=bash]
 # Follow the official Arducam Jetson installation guide for the IMX219
@@ -505,7 +505,7 @@ With propellers removed and the drone connected to QGC via USB:
 \begin{enumerate}
     \item Go to \textbf{Vehicle Setup $\rightarrow$ Actuators $\rightarrow$ Motors}.
     \item Spin each motor individually at low throttle using the sliders.
-    \item Verify each motor spins in the correct direction (see motor diagram in the User Manual, Appendix~B): M1 Front-Right CCW, M2 Back-Left CW, M3 Front-Left CW, M4 Back-Right CCW.
+    \item Verify each motor spins in the correct direction (see motor diagram in the User Manual, Appendix~D): M1 Front-Right CCW, M2 Back-Left CW, M3 Front-Left CW, M4 Back-Right CCW.
     \item If a motor spins in the wrong direction, swap any two of its three phase wires at the ESC output.
 \end{enumerate}
 
