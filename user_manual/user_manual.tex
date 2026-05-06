@@ -174,7 +174,7 @@ This section lists all hardware components with their exact names and models. Th
 \textbf{\#} & \textbf{Component} & \textbf{Part Name / Model} & \textbf{Notes} \\
 \midrule
 13 & Companion computer & NVIDIA Jetson Orin Nano 8GB & Main onboard computer \\
-14 & Camera & Arducam IMX477 & 12\,MP, 100$^\circ$ FOV, CSI interface \\
+14 & Camera & Arducam IMX219 & 8\,MP, 62$^\circ$ FOV, CSI interface, fixed focus \\
 \bottomrule
 \end{tabular}
 
@@ -209,7 +209,7 @@ This section lists all hardware components with their exact names and models. Th
 \texttt{PX4 Autopilot v1.14+}~\cite{px4}: Open-source flight stack managing low-level flight control, sensor fusion, geofencing, and safety features. The Pixhawk comes pre-flashed and ready to use. To update the firmware to a newer version, see Section~\ref{sec:firmware}.
 
 \textbf{NVIDIA Jetson Orin Nano}\\
-\texttt{ROS 2 Humble}~\cite{ros2humble} \texttt{with MAVROS}~\cite{mavros}: communicates with the Pixhawk via \texttt{/dev/ttyACM0}\\
+\texttt{ROS 2 Humble}~\cite{ros2humble} \texttt{with MAVROS}~\cite{mavros}: communicates with the Pixhawk via \texttt{/dev/ttyTHS1}\\
 \texttt{Drone Brain}: Repository with autonomous missions, tests and helper scripts. This repository is actively developed. For the current list of available missions, tests, and helpers, refer to the repository README and the \texttt{docs/} folder. See Section~\ref{sec:repos} for setup instructions.
 
 Download: \url{https://github.com/autonomous-forest-drone/drone-brain}
@@ -304,7 +304,7 @@ Export parameters to a backup file and reboot Pixhawk once.
 
 \textbf{Prerequisites:}
 \begin{itemize}
-    \item Jetson powered and connected to Pixhawk via USB
+    \item Jetson powered and connected to Pixhawk via UART
     \item Same WiFi network available for Jetson and operator computer
 \end{itemize}
 
@@ -339,7 +339,7 @@ ssh beetlesniffer@<jetson-ip-address>
 
 On the Jetson, run:
 \begin{lstlisting}[language=bash]
-ls /dev/ttyACM*
+ls /dev/ttyTHS*
 \end{lstlisting}
 
 
@@ -566,7 +566,7 @@ All scripts in \texttt{drone-brain} follow the same two-terminal pattern. All te
 
 \textbf{Terminal 1 -- start MAVROS (required for every mission or test):}
 \begin{lstlisting}[language=bash]
-ros2 launch mavros px4.launch fcu_url:=/dev/ttyACM0
+ros2 launch mavros px4.launch fcu_url:=/dev/ttyTHS1:115200
 \end{lstlisting}
 
 \textbf{Terminal 2 -- run a mission, test, or helper:}
@@ -589,7 +589,7 @@ python3 ~/drone-brain/helpers/<helper>.py
 \midrule
 Test & \texttt{hover-test} & Basic hover to verify arming and altitude hold \\
 Helper & \texttt{telemetry-monitoring} & Prints live telemetry to the terminal \\
-Helper & \texttt{image-sender} & Captures a frame from the Arducam IMX477 via GStreamer, resizes to 128$\times$128, and transmits it to the ground station in 128-byte chunks over MAVROS Tunnel messages every 20 seconds \\
+Helper & \texttt{image-sender} & Captures a frame from the Arducam IMX219 via GStreamer, resizes to 128$\times$128, and transmits it to the ground station in 128-byte chunks over MAVROS Tunnel messages every 20 seconds \\
 \bottomrule
 \end{tabular}
 
@@ -686,7 +686,7 @@ One side lifts first & Motor mapping incorrect & Verify motor assignments in QGC
 Drone will not take off & Low battery or weak motors & Charge battery; confirm hover throttle around 60\% \\
 Compass error & Magnetic interference & Recalibrate outdoors; move GPS mast away from power cables \\
 Telemetry lost & Radio or range issue & Check antenna orientation; reduce distance \\
-MAVROS fails to connect & USB device not found or no permission & Check \texttt{/dev/ttyACM0} exists; run \texttt{sudo chmod 666 /dev/ttyACM0} \\
+MAVROS fails to connect & UART device not found or no permission & Check \texttt{/dev/ttyTHS1} exists; add user to dialout group (\texttt{sudo usermod -aG dialout \$USER}, then log out and back in) \\
 Mission script errors & Missing dependency or wrong path & Check \texttt{requirements.txt} installed; verify script path \\
 \bottomrule
 \end{longtable}
@@ -751,10 +751,10 @@ ros2 topic hz /camera/image_raw
 tegrastats
 
 # Check UART device is present
-ls /dev/ttyACM0
+ls /dev/ttyTHS1
 
 # Fix UART permissions if access is denied
-sudo chmod 666 /dev/ttyACM0
+sudo usermod -aG dialout $USER
 \end{lstlisting}
 
 \subsubsection{Battery and Power System}
@@ -927,11 +927,11 @@ Peak current draw & 60\,A (all motors) \\
 \multicolumn{2}{l}{\textbf{Sensors}} \\
 GPS & Holybro M10 (GPS + GLONASS) \\
 Barometer & MS5611 ($\pm$10\,cm accuracy) \\
-Camera & Arducam IMX477, 12\,MP, 100$^\circ$ FOV, CSI \\
+Camera & Arducam IMX219, 8\,MP, 62$^\circ$ FOV, CSI, fixed focus \\
 \midrule
 \multicolumn{2}{l}{\textbf{Communication}} \\
 Telemetry & 915\,MHz or 433\,MHz, up to 1\,km \\
-Jetson--Pixhawk & USB serial, \texttt{/dev/ttyACM0}, MAVLink 2.0 \\
+Jetson--Pixhawk & UART serial, \texttt{/dev/ttyTHS1:115200}, MAVLink 2.0 \\
 RC & 2.4\,GHz AFHDS \\
 \midrule
 \multicolumn{2}{l}{\textbf{Computing}} \\

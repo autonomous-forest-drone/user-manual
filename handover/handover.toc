@@ -28,7 +28,7 @@
 \contentsline {section}{\numberline {6}Software Setup}{11}{section.6}%
 \contentsline {subsection}{\numberline {6.1}Jetson Orin Nano Environment}{11}{subsection.6.1}%
 \contentsline {subsection}{\numberline {6.2}ROS 2 Humble and MAVROS}{11}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Camera Setup (Arducam IMX477)}{12}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.3}Camera Setup (Arducam IMX219)}{12}{subsection.6.3}%
 \contentsline {subsection}{\numberline {6.4}drone-brain Repository}{12}{subsection.6.4}%
 \contentsline {subsection}{\numberline {6.5}ground-control-station Repository}{13}{subsection.6.5}%
 \contentsline {section}{\numberline {7}Commissioning and Testing}{13}{section.7}%

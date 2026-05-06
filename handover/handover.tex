@@ -112,13 +112,13 @@ Telemetry radio (ground) & Matching RFD900x or SiK unit & Must match frequency b
 RC receiver & FlySky FS-iA6B & PPM mode \\
 RC transmitter & FlySky FS-i6 & 6-channel, 2.4\,GHz AFHDS \\
 Companion computer & NVIDIA Jetson Orin Nano 8\,GB Developer Kit & Includes case \\
-Camera & Arducam IMX477 & 12\,MP, 100$^\circ$ FOV, MIPI CSI \\
+Camera & Arducam IMX219 & 8\,MP, 62$^\circ$ FOV, MIPI CSI, fixed focus \\
 Main battery & 4S LiPo 14.8\,V 5000\,mAh & XT60 connector \\
 Battery charger & 4S LiPo balance charger & Balance charging required \\
 XT60 Y-splitter cable & XT60 female to 2$\times$ XT60 male & Splits battery to power module and Jetson supply \\
 Jetson power adapter cable & XT60 male to 5.5$\times$2.5\,mm barrel jack & Direct connection from Y-splitter to Jetson Orin Nano power input; no converter needed (Jetson accepts 9--20\,V) \\
 Vibration dampening plate & M3-compatible foam or rubber standoff plate & Between Pixhawk and Jetson case \\
-CSI ribbon cable & 22-pin, 0.5\,mm pitch & Arducam IMX477 to Jetson CSI0 (camera0) \\
+CSI ribbon cable & 22-pin (Jetson) to 15-pin (camera), 0.5\,mm pitch & Arducam IMX219 to Jetson CSI0 (camera0) \\
 Jetson--Pixhawk UART cable & Female Dupont 3-pin (Jetson GPIO) to JST-GH 6-pin (Pixhawk TELEM2) & Custom cable; TX, RX, GND \\
 Motor mounting screws (extended) & M3 $\times$ (stock length + 6\,mm) & See Section~\ref{sec:propguard}; do not exceed this length \\
 Velcro straps ($\times$2) & Heavy-duty adhesive velcro & Battery and Jetson mounting \\
@@ -135,7 +135,7 @@ The following parts were designed and 3D printed for this build. Print files are
 \textbf{Part} & \textbf{Quantity} & \textbf{Notes} \\
 \midrule
 Propeller guard & 4 & One per motor arm \\
-Camera mount & 1 & Attaches to front of frame; holds Arducam IMX477 facing forward \\
+Camera mount & 1 & Attaches to front of frame; holds Arducam IMX219 facing forward \\
 GPS mast & 1 & Custom height required -- the original Holybro mast is too short when the Jetson is installed. The mast must raise the GPS module high enough to clear the Jetson and its case to avoid magnetic interference. \\
 \bottomrule
 \end{tabular}
@@ -219,9 +219,9 @@ Mount the FlySky FS-iA6B RC receiver on the frame with its antenna wires routed 
 
 \begin{enumerate}
     \item 3D print the camera mount.
-    \item Install the Arducam IMX477 camera in the mount with the lens facing forward.
+    \item Install the Arducam IMX219 camera in the mount with the lens facing forward.
     \item Attach the mount to the front of the frame.
-    \item Route the 22-pin 0.5\,mm CSI ribbon cable from the camera toward the Jetson CSI0 connector (camera0). Take care not to kink or crease the ribbon cable; leave a gentle loop for vibration relief.
+    \item Route the 22-pin to 15-pin CSI ribbon cable from the camera toward the Jetson CSI0 connector (camera0). Take care not to kink or crease the ribbon cable; leave a gentle loop for vibration relief.
 \end{enumerate}
 
 \subsubsection{Step 10 -- RC Receiver Binding}
@@ -268,7 +268,7 @@ GPS & Holybro M10 GPS & Pixhawk 6C GPS1 & 8-pin JST-GH \\
 Telemetry radio (air) & RFD900x / SiK air unit & Pixhawk 6C TELEM1 & 6-pin JST-GH \\
 RC receiver & FlySky FS-iA6B PPM output & Pixhawk 6C RC IN & 3-pin servo (PPM) \\
 Jetson to Pixhawk (MAVLink) & Jetson GPIO TX/RX/GND (Dupont female) & Pixhawk 6C TELEM2 (JST-GH 6-pin) & Custom UART cable \\
-Camera CSI & Arducam IMX477 & Jetson Orin Nano CSI0 (camera0) & 22-pin, 0.5\,mm ribbon \\
+Camera CSI & Arducam IMX219 & Jetson Orin Nano CSI0 (camera0) & 22-pin to 15-pin ribbon \\
 \bottomrule
 \end{longtable}
 
@@ -280,7 +280,7 @@ Motor-to-ESC power wiring (the thick 3-phase cables) is part of the S500 kit and
 
 \textbf{Notes on the Jetson--Pixhawk UART link:}
 
-The Jetson connects to the Pixhawk via a custom UART cable: Jetson GPIO TX and RX pins (40-pin header) to Pixhawk TELEM2 (JST-GH 6-pin). Wire TX on the Jetson to RX on the Pixhawk, RX on the Jetson to TX on the Pixhawk, and GND to GND. On the Jetson Orin Nano, the UART appears as \texttt{/dev/ttyTHS1}. The PX4 TELEM2 baud rate must be set to 921600 via the \texttt{SER\_TEL2\_BAUD} parameter (see Section~\ref{sec:params}). If the MAVROS connection fails on startup, verify the device node exists with \texttt{ls /dev/ttyTHS*} and that the user has serial port permissions (\texttt{sudo usermod -aG dialout \$USER}, then log out and back in).
+The Jetson connects to the Pixhawk via a custom UART cable: Jetson GPIO TX and RX pins (40-pin header) to Pixhawk TELEM2 (JST-GH 6-pin). Wire TX on the Jetson to RX on the Pixhawk, RX on the Jetson to TX on the Pixhawk, and GND to GND. On the Jetson Orin Nano, the UART appears as \texttt{/dev/ttyTHS1}. The PX4 TELEM2 baud rate must be set to 115200 via the \texttt{SER\_TEL2\_BAUD} parameter (see Section~\ref{sec:params}). If the MAVROS connection fails on startup, verify the device node exists with \texttt{ls /dev/ttyTHS*} and that the user has serial port permissions (\texttt{sudo usermod -aG dialout \$USER}, then log out and back in).
 
 \textbf{Cable management:}
 
@@ -398,12 +398,12 @@ sudo usermod -aG dialout $USER
 ls -l /dev/ttyTHS1
 \end{lstlisting}
 
-\subsection{Camera Setup (Arducam IMX477)}
+\subsection{Camera Setup (Arducam IMX219)}
 
-The Arducam IMX477 connects to the Jetson CSI0 port via the 22-pin ribbon cable. Install the Arducam driver:
+The Arducam IMX219 connects to the Jetson CSI0 port via the 22-pin to 15-pin ribbon cable. Install the Arducam driver:
 
 \begin{lstlisting}[language=bash]
-# Follow the official Arducam Jetson installation guide for the IMX477
+# Follow the official Arducam Jetson installation guide for the IMX219
 # https://docs.arducam.com/Nvidia-Jetson-Camera/Native-Camera/Quick-Start-Guide/
 \end{lstlisting}
 
@@ -445,7 +445,7 @@ pip3 install -r requirements.txt
 
 Terminal 1 -- start MAVROS (required for every run):
 \begin{lstlisting}[language=bash]
-ros2 launch mavros px4.launch fcu_url:=/dev/ttyTHS1:921600
+ros2 launch mavros px4.launch fcu_url:=/dev/ttyTHS1:115200
 \end{lstlisting}
 
 Terminal 2 -- run a script:
@@ -577,7 +577,7 @@ python3 ~/drone-brain/tests/<gps-nav-test>.py --set-goal
 \subsubsection{Test 9 -- Camera Tests}
 
 \begin{enumerate}
-    \item Run the camera test scripts from \texttt{tests/} to verify autofocus and image capture. These can be run on the ground with the drone stationary.
+    \item Run the camera test scripts from \texttt{tests/} to verify image capture. These can be run on the ground with the drone stationary.
     \item Check that captured frames are correctly saved or transmitted.
     \item Run the telemetry monitoring helper and confirm live telemetry messages are printing to the terminal and/or appearing on the ground station.
 \end{enumerate}
@@ -661,9 +661,9 @@ PX4 parameter file & \texttt{drone-brain} repo root or dedicated config repo in 
     Holybro,
     \emph{S500 V2 Development Kit User Guide},
     \url{https://holybro.com/products/s500-v2-development-kit}, 2024.
-\bibitem{arducam_imx477}
+\bibitem{arducam_imx219}
     Arducam,
-    \emph{IMX477 Camera for NVIDIA Jetson -- Quick Start Guide},
+    \emph{IMX219 Camera for NVIDIA Jetson -- Quick Start Guide},
     \url{https://docs.arducam.com/Nvidia-Jetson-Camera/Native-Camera/Quick-Start-Guide/}, 2024.
 \end{thebibliography}
 
